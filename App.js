@@ -1,11 +1,14 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
+import Navigator from './src/Navigator';
+import { Provider } from 'react-redux'; 
+import Store from './src/redux/Store';
 
 function App() {
   return (
-    <div>
-      
-    </div>
+    <Provider store={Store}>
+      <Navigator/>
+    </Provider>
   )
 }
 

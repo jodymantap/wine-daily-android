@@ -3,7 +3,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'ShoppingList' do
+target 'WineDaily' do
   config = use_native_modules!
 
   use_react_native!(
@@ -12,7 +12,7 @@ target 'ShoppingList' do
     :hermes_enabled => false
   )
 
-  target 'ShoppingListTests' do
+  target 'WineDailyTests' do
     inherit! :complete
     # Pods for testing
   end

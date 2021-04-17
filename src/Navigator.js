@@ -3,9 +3,9 @@ import {NavigationContainer} from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import React from 'react';
-import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import { View } from 'react-native';
+import MainPage from './pages/MainPage';
 
 const Stack = createStackNavigator();
 const Navigator = () => {
@@ -15,7 +15,7 @@ const Navigator = () => {
             <Stack.Navigator>
                 { !isLogin ? (
                 <Stack.Screen name="WineDaily"
-                              component={Login} 
+                              component={MainPage} 
                               options={{
                                 title: 'WineDaily',
                                 headerStyle: {
@@ -25,6 +25,7 @@ const Navigator = () => {
                                 headerTitleStyle: {
                                   fontWeight: 'bold',
                                 },
+                                headerShown: false
                 }}/>
                 ) : (
                 <Stack.Screen name="Shopping List" component={Dashboard}/>

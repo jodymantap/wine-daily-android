@@ -1,8 +1,13 @@
 import { combineReducers } from 'redux';
 
 const initialState = {
+    cartTotal: 0,
     isLogin: false,
     data : [],
+}
+
+const initialState2 = {
+    cartTotal: 0,
 }
 
 const auth = (state=initialState, action) => {
@@ -13,14 +18,14 @@ const auth = (state=initialState, action) => {
             isLogin:true,
             dataUser : action.payload }
         }
-        case "addData" : {
+        case "addtocart" : 
             return {
-                ...state,
-                data : [...state.data, {todo : action.payload.name, id : action.payload.id}]
+            cartTotal: state.cartTotal+1
             }
-        }
         default : return state;
     }
 }
+
+
 
 export default combineReducers({auth})

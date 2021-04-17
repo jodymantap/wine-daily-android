@@ -1,24 +1,43 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import ShopSvg from "../assets/svg/shop.svg";
+import ListCard from '../components/ListCard';
+import axios from 'axios';
 
 function Login() {
-    const [username, setUsername] = useState();
-    const dispatch = useDispatch()
-    const {data, isLogin} = useSelector((state) => state.auth);
-    const handleSubmit = () => {
-        dispatch({type: "login", payload: username})
-    }
-    console.log(isLogin)
-    return (
-      <View style={{flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F6E8DF"}}>
-        <Text style={{color: "#FE9790", fontSize: 30, fontWeight: "bold", marginBottom: 30}}>Shopping List</Text>
-        <TextInput value={username} onChangeText={(text) => setUsername(text)} style={{fontSize: 20, borderColor: "#FE9790", borderWidth: 2, marginBottom: 10, borderRadius: 15, textAlign: "center", color: "#FE9790", width: 300}} placeholder="Enter your name"></TextInput>
-        <TouchableOpacity style={{backgroundColor: "#FE9790", padding: 10, width: 300, alignItems: "center", borderRadius: 15}} onPress={handleSubmit}>
-          <Text style={{fontSize: 20, color: "white", fontWeight: "bold"}}>LOGIN</Text>
-        </TouchableOpacity>
-      </View>
+  const [username, setUsername] = useState();
+  const dispatch = useDispatch()
+  const {data, isLogin} = useSelector((state) => state.auth);
+  const [isLoading, setLoading] = useState(true);
+  const [productData, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const handleSubmit = () => {
+    dispatch({type: "login", payload: username})
+  }
+  useEffect(() => {
+    axios.get(
+      `https://zax5j10412.execute-api.ap-southeast-1.amazonaws.com/dev/api/product/list?page=${currentPage}`
+      )
+      .then(response => {
+        setData(productData.concat(response.data.value.products));
+        setLoading(false);
+      })
+  }, [])
+  console.log(productData);
+  return (
+    <ScrollView>
+        <View style={{flex: 1, alignItems: "center", backgroundColor: "#F6E8DF"}}>
+          {productData && productData.map((e, i) => (
+            <ListCard key={i} productImage={e.image} 
+                      productVarietes={e.grapeVarietes.slice(0, 25) + `${ e.grapeVarietes.length > 25 ? "..." : ""}`}
+                      productName={e.name}
+                      productRegion={e.region +", "+ e.country}
+                      productPrice={`${"S$ "}` + `${e.price.toString().includes(".") ? e.price : e.price + ".00"}`}
+                      productLeft={`${e.qty < 1 ? "sold out" : ""}` + `${e.qty <=5 && e.qty > 0 ? e.qty + " left" : ""}`}
+            />
+          ))}          
+        </View>
+      </ScrollView>
     )
 }
 
